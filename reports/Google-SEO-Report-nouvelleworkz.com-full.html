@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: A4;
+    margin: 22mm 18mm 25mm 18mm;
+    @bottom-center {
+      content: "Page " counter(page) " of " counter(pages);
+      font-size: 9pt;
+      color: #6b7280;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+    @bottom-left {
+      content: "Confidential";
+      font-size: 7pt;
+      color: #d6d3cc;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+    @bottom-right {
+      content: "nouvelleworkz.com Google SEO Report";
+      font-size: 8pt;
+      color: #cbd5e1;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+  }
+
+  @page :first {
+    margin: 0;
+    @bottom-left { content: none; }
+    @bottom-center { content: none; }
+    @bottom-right { content: none; }
+  }
+
+  @page toc {
+    @bottom-center {
+      content: counter(page);
+      font-size: 9pt;
+      color: #6b7280;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Times New Roman', 'DejaVu Serif', Georgia, serif;
+    font-size: 10pt;
+    line-height: 1.55;
+    color: #1e293b;
+    background: white;
+  }
+
+  /* ─── Title Page (Clean White) ─── */
+  .title-page {
+    page: first;
+    width: 210mm;
+    height: 297mm;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #1a1a2e;
+    position: relative;
+    padding: 50mm 30mm 40mm 30mm;
+    border-top: 6mm solid #1e3a5f;
+  }
+
+  .title-page .badge {
+    background: #f7f6f3;
+    border: 1px solid #d6d3cc;
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 9pt;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 15mm;
+    color: #1e3a5f;
+  }
+
+  .title-page h1 {
+    font-size: 28pt;
+    font-weight: bold;
+    margin-bottom: 5mm;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    color: #1a1a2e;
+  }
+
+  .title-page .subtitle {
+    font-size: 13pt;
+    color: #6b7280;
+    margin-bottom: 12mm;
+    font-weight: 300;
+  }
+
+  .title-page .url {
+    font-size: 12pt;
+    color: #1e3a5f;
+    margin-bottom: 15mm;
+    padding: 4mm 8mm;
+    border: 1px solid #d6d3cc;
+    border-radius: 6px;
+    background: #faf9f7;
+  }
+
+  .title-page .score-box {
+    background: #faf9f7;
+    border: 2px solid #d6d3cc;
+    border-radius: 12px;
+    padding: 6mm 12mm;
+    margin-bottom: 15mm;
+  }
+
+  .title-page .score-number {
+    font-size: 42pt;
+    font-weight: bold;
+    color: #1e3a5f;
+    line-height: 1;
+  }
+
+  .title-page .score-label {
+    font-size: 10pt;
+    color: #6b7280;
+    margin-top: 2mm;
+  }
+
+  .title-page .meta {
+    font-size: 9pt;
+    color: #6b7280;
+    margin-top: 8mm;
+    padding-top: 5mm;
+    border-top: 1px solid #d6d3cc;
+  }
+
+  .title-page .meta span {
+    margin: 0 8px;
+  }
+
+  /* ─── Table of Contents ─── */
+  .toc-page {
+    page: toc;
+    page-break-before: always;
+  }
+
+  .toc-page h2 {
+    font-size: 18pt;
+    color: #1e3a5f;
+    margin-bottom: 8mm;
+    padding-bottom: 3mm;
+    border-bottom: 2px solid #1e3a5f;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .toc-list li {
+    padding: 2mm 0;
+    border-bottom: 1px solid #f1f5f9;
+    overflow: hidden;
+  }
+
+  .toc-list li.toc-section {
+    font-weight: bold;
+    font-size: 11pt;
+    padding-top: 4mm;
+    color: #0f172a;
+  }
+
+  .toc-list li.toc-sub {
+    padding-left: 8mm;
+    font-size: 9.5pt;
+    color: #475569;
+  }
+
+  .toc-score {
+    display: inline-block;
+    float: right;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 9pt;
+    font-weight: bold;
+    color: white;
+  }
+
+  .score-good { background: #2d6a4f; }
+  .score-warn { background: #d4740e; }
+  .score-bad { background: #c53030; }
+
+  /* ─── Section Styles ─── */
+  div.section {
+    page-break-before: always;
+  }
+
+  .section-header {
+    background: #faf9f7;
+    border-left: 4px solid #1e3a5f;
+    padding: 5mm 6mm;
+    margin-bottom: 6mm;
+    page-break-after: avoid;
+  }
+
+  .section-header h2 {
+    font-size: 16pt;
+    color: #0f172a;
+    margin-bottom: 1mm;
+  }
+
+  .section-header .section-score {
+    font-size: 12pt;
+    font-weight: bold;
+    float: right;
+    margin-top: -6mm;
+  }
+
+  h3 {
+    font-size: 12pt;
+    color: #1e3a5f;
+    margin-top: 6mm;
+    margin-bottom: 3mm;
+    padding-bottom: 1.5mm;
+    border-bottom: 1px solid #d6d3cc;
+    page-break-after: avoid;
+  }
+
+  h4 {
+    font-size: 10.5pt;
+    color: #334155;
+    margin-top: 4mm;
+    margin-bottom: 2mm;
+    page-break-after: avoid;
+  }
+
+  p {
+    margin-bottom: 3mm;
+    color: #334155;
+  }
+
+  .highlight {
+    background: #fef3c7;
+    border-left: 3px solid #d4740e;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .critical-box {
+    background: #fef2f2;
+    border-left: 3px solid #c53030;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .success-box {
+    background: #f0fdf4;
+    border-left: 3px solid #2d6a4f;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  /* ─── Tables ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4mm 0 6mm 0;
+    font-size: 9pt;
+  }
+
+  thead th {
+    background: #f7f6f3;
+    color: #0f172a;
+    font-weight: bold;
+    padding: 3mm 4mm;
+    text-align: left;
+    border-bottom: 2px solid #d6d3cc;
+    font-size: 9pt;
+  }
+
+  tbody td {
+    padding: 2.5mm 3mm;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #fdfcfa;
+  }
+
+  .status-pass {
+    color: #2d6a4f;
+    font-weight: bold;
+  }
+
+  .status-fail {
+    color: #c53030;
+    font-weight: bold;
+  }
+
+  .status-warn {
+    color: #d4740e;
+    font-weight: bold;
+  }
+
+  .status-partial {
+    color: #4a5568;
+    font-weight: bold;
+  }
+
+  /* ─── Charts ─── */
+  .chart-container {
+    text-align: center;
+    margin: 4mm 0;
+  }
+
+  .chart-container img {
+    max-width: 100%;
+    max-height: 120mm;
+    height: auto;
+  }
+
+  .chart-caption {
+    font-size: 8.5pt;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 2mm;
+    text-align: center;
+  }
+
+  .chart-half {
+    display: inline-block;
+    width: 48%;
+    vertical-align: top;
+    text-align: center;
+    margin: 2mm 0;
+  }
+
+  .chart-half img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ─── Two column layout ─── */
+  .two-col {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin: 3mm 0;
+  }
+
+  .two-col .col {
+    display: table-cell;
+    vertical-align: top;
+    padding: 0 2mm;
+  }
+
+  .four-col {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin: 3mm 0;
+  }
+
+  .four-col .col {
+    display: table-cell;
+    vertical-align: top;
+    padding: 0 1.5mm;
+  }
+
+  /* ─── Metric Cards ─── */
+  .metric-card {
+    background: #faf9f7;
+    border: 1px solid #d6d3cc;
+    border-radius: 6px;
+    padding: 2.5mm 3mm;
+    text-align: center;
+    margin: 2mm 0;
+  }
+
+  .metric-card .value {
+    font-size: 14pt;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+
+  .metric-card .label {
+    font-size: 7.5pt;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 1mm;
+  }
+
+  /* ─── Action Plan ─── */
+  .action-item {
+    background: #faf9f7;
+    border-radius: 4px;
+    padding: 3mm 4mm;
+    margin: 3mm 0;
+    border-left: 3px solid #cbd5e1;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .action-item.critical {
+    border-left-color: #c53030;
+    background: #fdf2f2;
+  }
+
+  .action-item.high {
+    border-left-color: #d4740e;
+    background: #fdf8ef;
+  }
+
+  .action-item.medium {
+    border-left-color: #1e3a5f;
+    background: #f0f4f8;
+  }
+
+  .action-item.low {
+    border-left-color: #94a3b8;
+  }
+
+  .action-item h4 {
+    margin-top: 0;
+    margin-bottom: 1.5mm;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .action-item .effort {
+    font-size: 8.5pt;
+    color: #64748b;
+    float: right;
+  }
+
+  .priority-tag {
+    display: inline-block;
+    padding: 0.5mm 3mm;
+    border-radius: 3px;
+    font-size: 8pt;
+    font-weight: bold;
+    color: white;
+    margin-right: 2mm;
+    vertical-align: middle;
+  }
+
+  .priority-critical { background: #c53030; }
+  .priority-high { background: #d4740e; }
+  .priority-medium { background: #1e3a5f; }
+  .priority-low { background: #94a3b8; }
+
+  /* ─── Code blocks ─── */
+  .code-block {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 3mm 4mm;
+    border-radius: 4px;
+    font-family: 'DejaVu Sans Mono', monospace;
+    font-size: 8pt;
+    line-height: 1.6;
+    margin: 3mm 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  /* ─── Divider ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid #d6d3cc;
+    margin: 5mm 0;
+  }
+
+  /* ─── Roadmap ─── */
+  .roadmap-phase {
+    background: #faf9f7;
+    border-radius: 6px;
+    padding: 4mm 5mm;
+    margin: 4mm 0;
+    border: 1px solid #d6d3cc;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .roadmap-phase h4 {
+    margin-top: 0;
+    border-bottom: none;
+    color: #1e3a5f;
+  }
+
+  .roadmap-phase ul {
+    margin: 2mm 0 0 5mm;
+    padding: 0;
+  }
+
+  .roadmap-phase li {
+    margin-bottom: 1.5mm;
+    font-size: 9.5pt;
+    color: #334155;
+  }
+
+  /* ─── Lists ─── */
+  ul {
+    margin-left: 5mm;
+    margin-bottom: 3mm;
+  }
+
+  li {
+    margin-bottom: 1.5mm;
+  }
+
+  /* ─── Data freshness ─── */
+  .data-freshness {
+    font-size: 8pt;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 4mm;
+    padding-top: 2mm;
+    border-top: 1px solid #d6d3cc;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ======================================================= TITLE PAGE === -->
+<div class="title-page">
+  <div class="badge">Full SEO Audit Report</div>
+  <h1>nouvelleworkz.com</h1>
+  <div class="subtitle">Prepared by Claude SEO</div>
+  <div class="score-box">
+    <div class="score-number">78<span style="font-size: 20pt; color: #94a3b8;">/100</span></div>
+    <div class="score-label">SEO Health Score</div>
+  </div>
+  <div class="meta">
+    <span>September 14, 2026</span>
+    <span>Full Audit</span>
+  </div>
+</div>
+
+
+<!-- ======================================================= TABLE OF CONTENTS === -->
+<div class="toc-page">
+  <h2>Table of Contents</h2>
+  <ul class="toc-list">
+    <li class="toc-section"><span>1. Executive Summary</span></li>
+    <li class="toc-sub"><span>Key Metrics, Critical Issues &amp; Quick Wins</span></li>
+    <li class="toc-section"><span>2. Audit Categories</span></li>
+    <li class="toc-sub"><span>What Works</span></li>
+    <li class="toc-sub"><span>Findings by Severity</span></li>
+    <li class="toc-section"><span>3. Core Web Vitals &amp; Performance</span></li>
+    <li class="toc-sub"><span>Lighthouse Scores &amp; Lab Metrics</span></li>
+    <li class="toc-sub"><span>CrUX Field Data &amp; Trends</span></li>
+    <li class="toc-sub"><span>Failed Audits &amp; Opportunities</span></li>
+    <li class="toc-section"><span>4. Search Console Performance</span></li>
+    <li class="toc-sub"><span>Key Metrics &amp; Top Queries</span></li>
+    <li class="toc-sub"><span>Position Analysis &amp; Quick Wins</span></li>
+    <li class="toc-section"><span>5. Indexation Status</span></li>
+    <li class="toc-sub"><span>Index Coverage &amp; Per-URL Results</span></li>
+    <li class="toc-section"><span>6. Action Plan</span></li>
+    <li class="toc-sub"><span>Phased Roadmap</span></li>
+    <li class="toc-section"><span>7. Data Sources &amp; Methodology</span></li>
+  </ul>
+</div>
+
+
+<!-- ======================================================= 1. EXECUTIVE SUMMARY === -->
+<div class="section">
+  <div class="section-header">
+    <h2>1. Executive Summary</h2>
+  </div>
+
+  <p>This report presents a comprehensive SEO audit of <strong>nouvelleworkz.com</strong> for a <strong>Local Service — Direct Renovation Contractor (Singapore)</strong> site, generated on September 14, 2026. Findings combine technical, content, schema, performance, visual, and search-readiness evidence as available.</p>
+
+  <div class="two-col">
+    <div class="col">
+      <div class="metric-card">
+        <div class="value" style="color: #d4740e;">78/100</div>
+        <div class="label">SEO Health Score</div>
+      </div>
+
+    </div>
+    <div class="col">
+      <div class="metric-card">
+        <div class="value" style="color: #1e3a5f;">322</div>
+        <div class="label">Total Clicks</div>
+      </div>
+
+    </div>
+    <div class="col">
+      <div class="metric-card">
+        <div class="value" style="color: #4a5568;">26,747</div>
+        <div class="label">Impressions</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="critical-box">
+    <strong>Critical Issues Found:</strong>
+    <ol>
+      <li><strong>Info:</strong> Mobile Core Web Vitals Bottleneck: Mobile Lighthouse score is 41/100 with Total Blocking Time of 870ms and lab LCP of 4.5s (CrUX 28-day field LCP is 2,999ms, needs improvement). Primary drag: 666KB Google Tag Manager scripts executing 907ms on main thread alongside Elementor scripts.</li>
+      <li><strong>Info:</strong> Vestigial E-Commerce Pages in XML Sitemap: Inactive WooCommerce pages (/shop/, /cart/, /checkout/, /my-account/) are in page-sitemap.xml with 0-1 words, creating crawl waste and diluting site authority.</li>
+      <li><strong>Info:</strong> Heading Hierarchy Inconsistencies: 46 pages have multiple H1s (such as core commercial &amp; residential service pages) or 0 H1s (e.g. /faq-page/), confusing search engines about primary topic focus.</li>
+      <li><strong>Info:</strong> Missing &amp; Unoptimized Image Alt Text: Out of 864 media library images, 270 have empty alt attributes and 283 contain raw timestamp filenames (over 64% total unoptimized).</li>
+      <li><strong>Info:</strong> CrUX Real Field TTFB Degradation: Real Chrome user TTFB p75 has degraded to 2,646ms over the last 25 weeks (Poor threshold is 1,800ms) indicating dynamic PHP/LiteSpeed cold-start latency.</li>
+    </ol>
+  </div>
+
+  <div class="success-box">
+    <strong>Quick Wins:</strong>
+    <ol>
+      <li>Set noindex,follow on vestigial WooCommerce utility pages (/cart/, /checkout/, /my-account/, /shop/) and remove them from page-sitemap.xml.</li>
+      <li>Audit and consolidate Google Tag Manager tags (remove duplicate GA4/Ads containers) and defer third-party analytics to reduce main-thread blocking by &gt;450ms.</li>
+      <li>Normalize heading structure across commercial and residential service pages to guarantee exactly one H1 tag per URL.</li>
+      <li>Deploy the completed image alt text dictionary across top service and portfolio images.</li>
+      <li>Add missing HTTP security headers (Strict-Transport-Security, X-Content-Type-Options: nosniff, Cross-Origin-Opener-Policy) in .htaccess.</li>
+    </ol>
+  </div>
+
+</div>
+
+<!-- ======================================================= 2. AUDIT CATEGORIES === -->
+<div class="section">
+  <div class="section-header">
+    <h2>2. Audit Categories</h2>
+  </div>
+
+  <h3>2.1 Technical SEO</h3>
+  <p><strong>Score:</strong> <span class="status-pass">82/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>All 118 XML sitemap URLs return clean HTTP 200 responses with zero 404 errors or redirection loops.</li>
+    <li>Canonical tags match Google index canonicals across crawled URLs.</li>
+    <li>Robots.txt is well-structured and explicitly allows major AI bots (GPTBot, ClaudeBot, PerplexityBot).</li>
+    <li>HTTP/3 (QUIC) and Brotli compression active on LiteSpeed web server.</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>High Server Response Time (TTFB) in Field Data <span class="status-warn">High</span></h4>
+    <p>CrUX 28-day p75 TTFB is 2,646ms (classified as Poor by Google, &gt;1,800ms). While static cached pages respond in ~16ms, dynamic requests or cache misses take 2.5s+ to generate in PHP/LiteSpeed.</p>
+    <p><strong>Recommendation:</strong> Configure LiteSpeed Cache crawler to keep all sitemap pages warm, optimize database queries, and consider Cloudflare Enterprise/APO edge caching.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Missing HTTP Security Headers <span class="status-warn">Medium</span></h4>
+    <p>The server does not send Strict-Transport-Security (HSTS), X-Content-Type-Options: nosniff, or Cross-Origin-Opener-Policy (COOP) headers.</p>
+    <p><strong>Recommendation:</strong> Add Strict-Transport-Security, X-Content-Type-Options: nosniff, and Referrer-Policy headers to the Apache/.htaccess or LiteSpeed configuration.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.2 Content Quality &amp; E-E-A-T</h3>
+  <p><strong>Score:</strong> <span class="status-warn">76/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Exceptional E-E-A-T credentials: 96 of 119 pages cite HDB Licence HB-075810E, BCA, bizSAFE Level 3, and Director James Liang with 9+ years experience.</li>
+    <li>High-depth technical renovation pillar guides (HDB BTO schedules, Sintered stone vs quartz, F&amp;B renovation SCDF/SFA licensing, Commercial reinstatement checklists) average 1,500+ words.</li>
+    <li>Factual tables with Singapore reference prices ($/sqft) establish high topical authority.</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Vestigial WooCommerce Thin Content Pages <span class="status-warn">Critical</span></h4>
+    <p>Pages /shop/ (0 words), /cart/ (1 word), /checkout/ (1 word), and /my-account/ (0 words) are indexed and present in page-sitemap.xml.</p>
+    <p><strong>Recommendation:</strong> Set noindex,follow on all WooCommerce utility pages and exclude them from page-sitemap.xml.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Thin Sub-Service Landing Pages <span class="status-warn">Medium</span></h4>
+    <p>Sub-service pages such as /residential/ceiling-partition/ (260 words), /residential/painting/ (212 words), and /residential/plastering/ (191 words) fall below the 300-word quality threshold.</p>
+    <p><strong>Recommendation:</strong> Expand sub-service pages to 600-800 words with specific scopes, materials, pricing ranges, and case studies.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.3 On-Page SEO</h3>
+  <p><strong>Score:</strong> <span class="status-warn">78/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Descriptive keyword-rich URL slugs across all blog posts and main services.</li>
+    <li>Ranked for 1,000+ keywords in Google Search Console generating 26,747 impressions and 322 clicks over 28 days.</li>
+    <li>Comprehensive meta titles and meta descriptions present on core pages.</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Multiple H1 Tags on Core Service Pages <span class="status-warn">High</span></h4>
+    <p>46 pages have heading hierarchy defects, including 2 H1 tags on key commercial and residential landing pages (e.g. /commercial/salon-retail-shop-renovation/, /residential/condo-renovation/).</p>
+    <p><strong>Recommendation:</strong> Edit Elementor templates to ensure the main title is the sole &lt;h1&gt; and all sub-headings use &lt;h2&gt;, &lt;h3&gt;, or &lt;h4&gt;.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Orphaned &amp; Low Internal Link Pages <span class="status-warn">Medium</span></h4>
+    <p>30 pages have 0 contextual internal links originating from other articles, limiting PageRank distribution.</p>
+    <p><strong>Recommendation:</strong> Implement hub-and-spoke internal linking connecting specialized trade articles back to core service hubs.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.4 Schema &amp; Structured Data</h3>
+  <p><strong>Score:</strong> <span class="status-pass">88/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Homepage features 3 JSON-LD blocks including consolidated LocalBusiness, GeneralContractor, HomeAndConstructionBusiness, and Person schema.</li>
+    <li>Valid AggregateRating (5.0 rating from 78 verified reviews) passes Google Rich Results inspection for review snippets.</li>
+    <li>Valid WebSite and WebPage schema with search action.</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Deprecated FAQPage Rich Results <span class="status-warn">Info</span></h4>
+    <p>Google retired FAQPage rich results for all websites globally on May 7, 2026. While safe to retain for entity clarity, it no longer triggers SERP dropdowns.</p>
+    <p><strong>Recommendation:</strong> Retain existing FAQPage schema without modification; do not invest development time in adding new FAQPage markup for SERP rich snippet expansion.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Missing BreadcrumbList Schema on Deep Pages <span class="status-warn">Low</span></h4>
+    <p>Sub-service and blog pages lack BreadcrumbList schema, missing an opportunity for clean breadcrumb display in search snippets.</p>
+    <p><strong>Recommendation:</strong> Add automated BreadcrumbList JSON-LD to blog and service templates.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.5 Performance &amp; Core Web Vitals</h3>
+  <p><strong>Score:</strong> <span class="status-warn">62/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Real user CLS is 0.02 (CrUX field data - PASS).</li>
+    <li>Real user INP is under 100ms (CrUX field data - PASS).</li>
+    <li>Desktop First Contentful Paint is 0.4s and Desktop LCP is 0.5s in lab audits.</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>High Mobile Total Blocking Time (TBT 870ms) <span class="status-warn">High</span></h4>
+    <p>Mobile Lighthouse score is 41/100 primarily due to 870ms TBT and 4.5s lab LCP. Third-party Google Tag Manager scripts transfer 666KB and occupy 907ms of main-thread time.</p>
+    <p><strong>Recommendation:</strong> Audit GTM containers to remove redundant tags, load GTM asynchronously with delay, and enable LiteSpeed JS deferral.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Field LCP Needs Improvement (2,999ms) <span class="status-warn">Medium</span></h4>
+    <p>Chrome UX Report 28-day p75 LCP is 2,999ms (Google Good threshold is 2,500ms). LCP image element render delay is compounded by TTFB latency.</p>
+    <p><strong>Recommendation:</strong> Preload hero LCP image, add fetchpriority=high on above-the-fold banner, and optimize server TTFB.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.6 AI Search Readiness &amp; GEO</h3>
+  <p><strong>Score:</strong> <span class="status-pass">92/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Active llms.txt deployed at root (https://nouvelleworkz.com/llms.txt) with full company entity, licensing, and 2026 price reference data.</li>
+    <li>Robots.txt explicitly grants crawling access to GPTBot, ClaudeBot, and PerplexityBot.</li>
+    <li>Content contains dense factual specifications, statutory regulatory rules (HDB, BCA, SCDF, SFA), and direct quotes from Director James Liang.</li>
+    <li>High passage-level citability across HDB BTO and commercial reinstatement checklists.</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Entity Author Verification Links <span class="status-warn">Low</span></h4>
+    <p>Director James Liang is profiled in text and Person schema, but lacks sameAs links pointing to verified LinkedIn or BCA licensing registries.</p>
+    <p><strong>Recommendation:</strong> Add sameAs array pointing to verified professional profiles to maximize LLM knowledge graph confidence.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.7 Images &amp; Media</h3>
+  <p><strong>Score:</strong> <span class="status-warn">58/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Responsive WebP images delivered via LiteSpeed / CDN.</li>
+    <li>High aesthetic quality and original photography of completed Singapore renovation projects.</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Missing &amp; Raw Filename Alt Text (64% Defect Rate) <span class="status-warn">High</span></h4>
+    <p>Of 864 media library images, 270 have empty alt text and 283 have raw timestamp strings (e.g. vinyl_flooring_handover_1786439745102), hurting image search rankings and accessibility.</p>
+    <p><strong>Recommendation:</strong> Bulk update image alt text using the prepared alt proposals dictionary with descriptive keywords and Singapore property context.</p>
+  </div>
+  <hr class="divider">
+</div>
+
+<!-- ======================================================= 3. CORE WEB VITALS === -->
+<div class="section">
+  <div class="section-header">
+    <h2>3. Core Web Vitals &amp; Performance</h2>
+  </div>
+
+  <hr class="divider">
+  <h3>3.3 CrUX Field Data (28-day Rolling Average)</h3>
+
+    <div class="chart-container">
+      <img src="file://d:\nouvelleworkz\nouvelleworkz.com-audit\charts\cwv_distributions.png" style="width: 85%;" alt="CWV distribution chart">
+      <div class="chart-caption">Figure 1: Core Web Vitals field data distribution across Good, Needs Improvement, and Poor buckets.</div>
+    </div>
+
+  <table>
+    <thead>
+      <tr><th>Metric</th><th>p75</th><th>Rating</th><th>Good %</th><th>NI %</th><th>Poor %</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>TTFB</td><td>2646ms</td>
+      <td class="status-fail">POOR</td>
+      <td>36.2%</td><td>5.7%</td><td>58.0%</td></tr>
+      <tr><td>FCP</td><td>2879ms</td>
+      <td class="status-warn">NEEDS-IMPROVEMENT</td>
+      <td>55.3%</td><td>21.9%</td><td>22.8%</td></tr>
+      <tr><td>largest_contentful_paint_image_element_render_delay</td><td>263</td>
+      <td class="status-warn">UNKNOWN</td>
+      <td>N/A%</td><td>N/A%</td><td>N/A%</td></tr>
+      <tr><td>largest_contentful_paint_image_resource_load_delay</td><td>340</td>
+      <td class="status-warn">UNKNOWN</td>
+      <td>N/A%</td><td>N/A%</td><td>N/A%</td></tr>
+      <tr><td>largest_contentful_paint_image_time_to_first_byte</td><td>2545</td>
+      <td class="status-warn">UNKNOWN</td>
+      <td>N/A%</td><td>N/A%</td><td>N/A%</td></tr>
+      <tr><td>round_trip_time</td><td>71</td>
+      <td class="status-warn">UNKNOWN</td>
+      <td>76.7%</td><td>22.4%</td><td>0.9%</td></tr>
+      <tr><td>CLS</td><td>0.020</td>
+      <td class="status-pass">GOOD</td>
+      <td>90.1%</td><td>7.2%</td><td>2.7%</td></tr>
+      <tr><td>LCP</td><td>2999ms</td>
+      <td class="status-warn">NEEDS-IMPROVEMENT</td>
+      <td>63.2%</td><td>29.1%</td><td>7.7%</td></tr>
+      <tr><td>largest_contentful_paint_image_resource_load_duration</td><td>96</td>
+      <td class="status-warn">UNKNOWN</td>
+      <td>N/A%</td><td>N/A%</td><td>N/A%</td></tr>
+    </tbody>
+  </table>
+  <p class="data-freshness">Collection period: 2026-08-15 to 2026-09-11. CrUX data is a 28-day rolling average updated daily ~04:00 UTC.</p>
+
+  <h3>3.4 Core Web Vitals Trends (25-week)</h3>
+    <div class="chart-container">
+      <img src="file://d:\nouvelleworkz\nouvelleworkz.com-audit\charts\cwv_timeline.png" style="width: 85%;" alt="CWV timeline trends">
+      <div class="chart-caption">Figure 2: CrUX p75 values over 25 weeks with Good/Poor threshold bands.</div>
+    </div>
+
+  <table>
+    <thead>
+      <tr><th>Metric</th><th>Direction</th><th>Change</th><th>Earliest Avg</th><th>Latest Avg</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>TTFB</td><td class="status-fail">DEGRADING</td>
+      <td>+92.4%</td><td>1409</td><td>2710</td></tr>
+      <tr><td>LCP</td><td class="status-fail">DEGRADING</td>
+      <td>+37.0%</td><td>2221</td><td>3042</td></tr>
+      <tr><td>CLS</td><td class="status-pass">IMPROVING</td>
+      <td>-90.3%</td><td>0.155</td><td>0.015</td></tr>
+      <tr><td>FCP</td><td class="status-fail">DEGRADING</td>
+      <td>+68.3%</td><td>1698</td><td>2858</td></tr>
+      <tr><td>INP</td><td class="">INSUFFICIENT_DATA</td>
+      <td>+0.0%</td><td>?</td><td>?</td></tr>
+    </tbody>
+  </table>
+
+</div>
+
+<!-- ======================================================= 4. SEARCH PERFORMANCE === -->
+<div class="section">
+  <div class="section-header">
+    <h2>4. Search Console Performance</h2>
+  </div>
+
+  <p>Period: 2026-08-17 to 2026-09-11 | Property: https://nouvelleworkz.com/</p>
+  <p><strong>https://nouvelleworkz.com/</strong> appeared in <strong>1000</strong> unique search queries with <strong>26,747</strong> total impressions during this period.</p>
+
+  <h3>4.1 Key Metrics</h3>
+  <div class="four-col">
+    <div class="col">      <div class="metric-card">
+        <div class="value" style="color: #1e3a5f;">322</div>
+        <div class="label">Total Clicks</div>
+      </div>
+</div>
+    <div class="col">      <div class="metric-card">
+        <div class="value" style="color: #4a5568;">26,747</div>
+        <div class="label">Total Impressions</div>
+      </div>
+</div>
+    <div class="col">      <div class="metric-card">
+        <div class="value" style="color: #b8860b;">1.2%</div>
+        <div class="label">Average CTR</div>
+      </div>
+</div>
+    <div class="col">      <div class="metric-card">
+        <div class="value" style="color: #1a1a2e;">1000</div>
+        <div class="label">Queries Found</div>
+      </div>
+</div>
+  </div>
+  <hr class="divider">
+
+  <h3>4.2 Top Queries by Impressions</h3>
+    <div class="chart-container">
+      <img src="file://d:\nouvelleworkz\nouvelleworkz.com-audit\charts\top_queries.png" style="width: 85%;" alt="Top queries bar chart">
+      <div class="chart-caption">Figure 3: Top search queries ranked by impression volume from Google Search Console (28-day period).</div>
+    </div>
+
+  <h3>4.3 Query Detail Table</h3>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Query</th><th>Clicks</th><th>Impressions</th><th>CTR</th><th>Position</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>commercial renovation singapore</td><td>4</td><td>275</td>
+      <td>1.45%</td><td class="status-fail">36.6</td></tr>
+      <tr><td>2</td><td>condo renovation singapore</td><td>0</td><td>271</td>
+      <td>0%</td><td class="status-fail">60.0</td></tr>
+      <tr><td>3</td><td>commercial renovation</td><td>0</td><td>258</td>
+      <td>0%</td><td class="status-fail">40.9</td></tr>
+      <tr><td>4</td><td>nouvelle workz</td><td>40</td><td>209</td>
+      <td>19.14%</td><td class="status-warn">3.3</td></tr>
+      <tr><td>5</td><td>nouvelle workz</td><td>4</td><td>195</td>
+      <td>2.05%</td><td class="status-pass">2.0</td></tr>
+      <tr><td>6</td><td>nouvelle workz</td><td>3</td><td>185</td>
+      <td>1.62%</td><td class="status-pass">1.7</td></tr>
+      <tr><td>7</td><td>commercial renovation contractor singapore</td><td>0</td><td>182</td>
+      <td>0%</td><td class="status-fail">27.1</td></tr>
+      <tr><td>8</td><td>hdb rewiring singapore</td><td>0</td><td>180</td>
+      <td>0%</td><td class="status-fail">18.6</td></tr>
+      <tr><td>9</td><td>nouvelle workz pte ltd reviews</td><td>2</td><td>131</td>
+      <td>1.53%</td><td class="status-warn">3.7</td></tr>
+      <tr><td>10</td><td>nouvelle workz pte ltd reviews</td><td>1</td><td>130</td>
+      <td>0.77%</td><td class="status-warn">6.4</td></tr>
+      <tr><td>11</td><td>epoxy flooring singapore</td><td>0</td><td>111</td>
+      <td>0%</td><td class="status-fail">28.8</td></tr>
+      <tr><td>12</td><td>epoxy</td><td>0</td><td>110</td>
+      <td>0%</td><td class="status-warn">6.1</td></tr>
+      <tr><td>13</td><td>nouvelle workz pte ltd</td><td>18</td><td>105</td>
+      <td>17.14%</td><td class="status-pass">1.1</td></tr>
+      <tr><td>14</td><td>commercial renovation company singapore</td><td>0</td><td>102</td>
+      <td>0%</td><td class="status-fail">47.9</td></tr>
+      <tr><td>15</td><td>carpentry works singapore</td><td>0</td><td>98</td>
+      <td>0%</td><td class="status-fail">66.6</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.4 Query Position Analysis</h3>
+  <div class="two-col">
+    <div class="col">
+      <div class="metric-card">
+        <div class="value" style="color: #2d6a4f;">137</div>
+        <div class="label">Queries in Top 3</div>
+      </div>
+
+    </div>
+    <div class="col">
+      <div class="metric-card">
+        <div class="value" style="color: #d4740e;">398</div>
+        <div class="label">Queries in Top 10</div>
+      </div>
+
+    </div>
+  </div>
+  <p>602 queries rank beyond position 10 and may benefit from content optimization.</p>
+
+  <h3>4.5 Quick Wins (4 opportunities)</h3>
+  <div class="highlight">These queries rank at position 4-10 with high impressions. A small ranking improvement could yield significant traffic gains.</div>
+  <table>
+    <thead>
+      <tr><th>Query</th><th>Position</th><th>Impressions</th><th>Clicks</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>nouvelle workz pte ltd reviews</td><td>6.4</td><td>130</td><td>1</td></tr>
+      <tr><td>epoxy</td><td>6.1</td><td>110</td><td>0</td></tr>
+      <tr><td>l box ceiling</td><td>8.6</td><td>97</td><td>1</td></tr>
+      <tr><td>electrical rewiring cost singapore</td><td>9.1</td><td>62</td><td>0</td></tr>
+    </tbody>
+  </table>
+
+  <p class="data-freshness">Search Analytics data has a 2-3 day lag. Data available for ~16 months.</p>
+</div>
+
+<!-- ======================================================= 5. INDEXATION STATUS === -->
+<div class="section">
+  <div class="section-header">
+    <h2>5. Indexation Status</h2>
+  </div>
+
+  <h3>5.3 Rich Results Detected</h3>
+  <table>
+    <thead>
+      <tr><th>URL</th><th>Rich Result Type</th></tr>
+    </thead>
+    <tbody>
+      <tr><td style="word-break:break-all;font-size:8pt;">https://nouvelleworkz.com/</td><td>Review snippets</td></tr>
+    </tbody>
+  </table>
+
+  <p class="data-freshness">URL Inspection API: 2,000 inspections/day per property.</p>
+</div>
+
+<!-- ======================================================= 6. ACTION PLAN === -->
+<div class="section">
+  <div class="section-header">
+    <h2>6. Action Plan</h2>
+  </div>
+
+  <div class="roadmap-phase">
+    <h4>Phase 1: Critical Fixes &amp; Hygiene <span class="effort">Week 1</span></h4>
+    <ul>
+      <li>Set noindex,follow on vestigial WooCommerce pages (/cart/, /checkout/, /my-account/, /shop/) and remove them from page-sitemap.xml.</li>
+      <li>Add missing security headers (HSTS, X-Content-Type-Options: nosniff, COOP) to .htaccess / LiteSpeed.</li>
+      <li>Correct dual &lt;h1&gt; tags on top commercial and residential service pages to enforce single H1 hierarchy.</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 2: Performance &amp; Mobile Speed Optimization <span class="effort">Weeks 2-3</span></h4>
+    <ul>
+      <li>Audit Google Tag Manager: remove redundant containers, defer non-critical tracking scripts to cut TBT by 400ms+.</li>
+      <li>Add fetchpriority=high and preload for hero LCP image on mobile homepage.</li>
+      <li>Configure LiteSpeed Cache crawler with scheduled warmup to eliminate TTFB spikes for first-time visitors.</li>
+      <li>Batch-update image alt text across top 100 service and portfolio images.</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 3: Content Expansion &amp; Authority <span class="effort">Month 2</span></h4>
+    <ul>
+      <li>Expand thin sub-service pages (/residential/ceiling-partition/, /painting/, /plastering/) to 600+ words with Singapore pricing and specs.</li>
+      <li>Deploy BreadcrumbList JSON-LD across all service and blog templates.</li>
+      <li>Build hub-and-spoke internal links from blog posts to core commercial &amp; residential service hubs.</li>
+      <li>Add sameAs social &amp; professional registry URLs to Director Person schema.</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 4: Monitoring, GEO Tracking &amp; Iteration <span class="effort">Ongoing</span></h4>
+    <ul>
+      <li>Monitor CrUX 28-day field LCP and TTFB trend toward passing green thresholds (&lt;2,500ms and &lt;800ms).</li>
+      <li>Track GSC high-impression quick wins (queries in positions 4-10 like nouvelle workz pte ltd reviews, l box ceiling, electrical rewiring cost).</li>
+      <li>Keep llms.txt updated with new 2026 pricing benchmarks and project completions.</li>
+      <li>Audit backlink profile monthly to monitor and disavow scrapers (e.g. kompromat100.info).</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================================================= DATA SOURCES & METHODOLOGY === -->
+<div class="section" style="text-align: center; padding-top: 15mm;">
+  <hr class="divider">
+  <h3 style="text-align: left;">Data Sources &amp; Methodology</h3>
+  <table>
+    <thead>
+      <tr><th>Source</th><th>Description</th><th>Update Frequency</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>PageSpeed Insights API</td>
+          <td>Lighthouse lab audit (mobile emulation, Moto G Power, slow 4G)</td>
+          <td>Real-time</td></tr>
+      <tr><td>Chrome UX Report (CrUX)</td>
+          <td>28-day rolling field data from real Chrome users</td>
+          <td>Daily ~04:00 UTC</td></tr>
+      <tr><td>CrUX History API</td>
+          <td>25-week p75 trend data per metric</td>
+          <td>Weekly</td></tr>
+      <tr><td>Google Search Console</td>
+          <td>Search Analytics (clicks, impressions, CTR, position)</td>
+          <td>2-3 day lag</td></tr>
+      <tr><td>URL Inspection API</td>
+          <td>Per-URL index status, coverage state, crawl info</td>
+          <td>Real-time (2,000/day)</td></tr>
+    </tbody>
+  </table>
+  <p style="color: #94a3b8; font-size: 9pt; margin-top: 5mm;">
+    Report generated by Claude SEO &mdash; Google SEO Intelligence Skill &mdash; September 14, 2026<br>
+    Methodology based on Google Web Vitals thresholds, Search Console documentation, and Lighthouse scoring algorithms.
+  </p>
+</div>
+
+</body>
+</html>
